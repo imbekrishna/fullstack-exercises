@@ -3,6 +3,7 @@ import PersonForm from "./components/PersonForm";
 import Filter from "./components/Filter";
 import Persons from "./components/Persons";
 import phonebookService from "./services/phonebook";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -12,6 +13,9 @@ const App = () => {
 
   const [filtered, setFiltered] = useState([]);
   const [searchValue, setSearchValue] = useState("");
+
+  const [message, setMessage] = useState(null);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     phonebookService.getAll().then((data) => setPersons(data));
@@ -46,9 +50,14 @@ const App = () => {
 
         phonebookService
           .update(person.id, personObject)
-          .then((data) =>
-            setPersons(persons.map((p) => (p.id !== person.id ? p : data)))
-          );
+          .then((data) => {
+            setPersons(persons.map((p) => (p.id !== person.id ? p : data)));
+            setMessage(`Updated ${newName}`);
+          })
+          .catch(() => {
+            setIsError(true);
+            setMessage(`Error adding ${person.name}`);
+          });
       }
     } else {
       const personObject = {
@@ -60,9 +69,16 @@ const App = () => {
       phonebookService
         .create(personObject)
         .then((response) => setPersons([...persons, response]));
+
+      setMessage(`Added ${newName}`);
     }
     setNewName("");
     setNewPhone("");
+
+    setTimeout(() => {
+      setMessage(null);
+      setIsError(false);
+    }, 5000);
   };
 
   const handleDelete = (id) => {
@@ -71,8 +87,20 @@ const App = () => {
     if (confirm) {
       phonebookService
         .remove(id)
-        .then(() => setPersons(persons.filter((person) => person.id !== id)));
+        .then(() => {
+          setPersons(persons.filter((person) => person.id !== id));
+          setMessage(`Deleted ${person.name}.`);
+        })
+        .catch(() => {
+          setIsError(true);
+          setMessage(`${person.name} doesn't exists on server.`);
+          setPersons(persons.filter((person) => person.id !== id));
+        });
     }
+    setTimeout(() => {
+      setIsError(false);
+      setMessage(null);
+    }, 5000);
   };
 
   const personExists = (name) => {
@@ -91,6 +119,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} isError={isError} />
       <Filter searchVal={searchValue} fieldChange={handleSearchChange} />
       <h3>add a new</h3>
       <PersonForm
