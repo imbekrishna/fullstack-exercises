@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import CountryDetail from "./services/CountryDetail";
+import { CountryList } from "./services/CountryList";
 
 function App() {
   const [countries, setCountries] = useState([]);
@@ -24,13 +26,17 @@ function App() {
     setFiltered(countryList);
   };
 
+  const handleClilck = (country) => {
+    setFiltered([country]);
+  };
+
   const getComponent = () => {
     if (filtered.length == 0) {
       return <p>No match found!</p>;
     } else if (filtered.length == 1) {
       return <CountryDetail country={filtered[0]} />;
     } else if (filtered.length <= 10) {
-      return <CountryList countries={filtered} />;
+      return <CountryList countries={filtered} handleClick={handleClilck} />;
     } else if (filtered.length > 10) {
       return <p>Too many matches, specify another filter</p>;
     }
@@ -39,43 +45,12 @@ function App() {
   return (
     <>
       <div>
-        find countries:{" "}
+        Find countries:{" "}
         <input value={search} onChange={handleSearch} type="text" />
         {getComponent()}
       </div>
     </>
   );
 }
-
-const CountryList = ({ countries, handleClick }) => {
-  return (
-    <>
-      {countries.map((country) => (
-        <p key={country.ccn3}>
-          {country.name.common}{" "}
-          <button onClick={() => handleClick(country.name.common)}>show</button>
-        </p>
-      ))}
-    </>
-  );
-};
-
-const CountryDetail = ({ country }) => {
-  return (
-    <div>
-      <h2>{country.name.common}</h2>
-      <p>Capital {country.capital[0]}</p>
-      <p>Area {country.area}</p>
-
-      <h3>Languages</h3>
-      <ul>
-        {Object.values(country.languages).map((e) => (
-          <li key={e}>{e}</li>
-        ))}
-      </ul>
-      <img src={country.flags.svg} alt={country.flags.alt} />
-    </div>
-  );
-};
 
 export default App;
