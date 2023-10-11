@@ -57,9 +57,9 @@ const App = () => {
                         );
                         setMessage(`Updated ${newName}`);
                     })
-                    .catch(() => {
+                    .catch((error) => {
                         setIsError(true);
-                        setMessage(`Error adding ${person.name}`);
+                        setMessage(error.response.data.error);
                     });
             }
         } else {
