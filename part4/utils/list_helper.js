@@ -25,29 +25,26 @@ const favoriteBlog = (blogs) => {
 };
 
 const mostBlogs = (data) => {
-  const obj = _.chain(data)
-    .countBy((item) => item?.author)
-    .value();
+  const authorCounts = _.countBy(data, 'author');
 
-  const author = _.maxBy(_.keys(obj), function (o) {
-    return obj[o];
-  });
+  const authorWithMostBlogs = _.maxBy(
+    _.keys(authorCounts),
+    (author) => authorCounts[author]
+  );
+
   return {
-    author: author,
-    blogs: obj[author],
+    author: authorWithMostBlogs,
+    blogs: authorCounts[authorWithMostBlogs] || 0,
   };
 };
 
 const mostLikes = (blogs) => {
-  var authors = _(blogs)
+  const authorLikes = _.chain(blogs)
     .groupBy('author')
-    .map((objs, key) => ({
-      author: key,
-      likes: _.sumBy(objs, 'likes'),
-    }))
+    .map((objs, author) => ({ author, likes: _.sumBy(objs, 'likes') }))
     .value();
 
-  return _.maxBy(authors, (o) => o.likes);
+  return _.maxBy(authorLikes, 'likes');
 };
 
 module.exports = {
