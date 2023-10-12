@@ -75,6 +75,53 @@ test('should not add blog without url field', async () => {
   expect(totalBlogs).toHaveLength(helper.initalBlogs.length);
 });
 
+test('should delete blog with valid id', async () => {
+  const initialBlogs = await helper.blogsInDb();
+
+  const blogToDelete = initialBlogs[0];
+
+  await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+
+  const endBlogs = await helper.blogsInDb();
+
+  expect(endBlogs).toHaveLength(helper.initalBlogs.length - 1);
+
+  const contents = endBlogs.map((blog) => blog.title);
+
+  expect(contents).not.toContain(blogToDelete.title);
+});
+
+test('should return 400 on deleting blog with invalid Id', async () => {
+  const invalidId = 'dfsada790dfa34jkd';
+
+  await api.delete(`/api/blogs/${invalidId}`).expect(400);
+});
+
+test('should update blog with valid id', async () => {
+  const initialBlogs = await helper.blogsInDb();
+  const { id, author, title, url } = initialBlogs[0];
+
+  const updatedBody = {
+    author,
+    title,
+    url,
+    likes: 100,
+  };
+
+  const updatedBlog = await api
+    .put(`/api/blogs/${id}`)
+    .send(updatedBody)
+    .expect(201);
+
+  const endBlogs = await helper.blogsInDb();
+
+  expect(endBlogs).toHaveLength(helper.initalBlogs.length);
+
+  const likesArray = endBlogs.map((blog) => blog.likes);
+
+  expect(likesArray).toContain(updatedBlog.body.likes);
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });

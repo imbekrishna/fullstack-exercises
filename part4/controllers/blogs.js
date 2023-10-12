@@ -33,7 +33,7 @@ blogsRouter.put('/:id', async (request, response) => {
     runValidators: true,
   });
 
-  response.json(updatedBlog);
+  response.status(201).json(updatedBlog);
 });
 
 module.exports = blogsRouter;
