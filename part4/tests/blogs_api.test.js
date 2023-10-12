@@ -14,7 +14,6 @@ beforeEach(async () => {
 });
 
 test('should fetch all the blogs in json format', async () => {
-
   const respone = await api
     .get('/api/blogs')
     .expect(200)
@@ -48,6 +47,32 @@ test('should add new blog to database', async () => {
   expect(finalBlogs).toHaveLength(initialBlogs.length + 1);
 
   expect(contents).toContain('This is third blog');
+});
+
+test('should not add blog without title field', async () => {
+  const blogWithoutTitle = {
+    author: 'imbekrishna',
+    url: 'https://imbekrishna.github.io',
+  };
+
+  await api.post('/api/blogs').send(blogWithoutTitle).expect(400);
+
+  const totalBlogs = await helper.blogsInDb();
+
+  expect(totalBlogs).toHaveLength(helper.initalBlogs.length);
+});
+
+test('should not add blog without url field', async () => {
+  const blogWithoutUrl = {
+    title: 'A blog withour url',
+    author: 'imbekrishna',
+  };
+
+  await api.post('/api/blogs').send(blogWithoutUrl).expect(400);
+
+  const totalBlogs = await helper.blogsInDb();
+
+  expect(totalBlogs).toHaveLength(helper.initalBlogs.length);
 });
 
 afterAll(() => {
