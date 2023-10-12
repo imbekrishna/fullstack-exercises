@@ -13,12 +13,6 @@ const initalBlogs = [
     url: 'https://imbekrishna.github.io',
     likes: 2,
   },
-  {
-    title: 'This is third blog',
-    author: 'imbekrishna',
-    url: 'https://imbekrishna.github.io',
-    likes: 3,
-  },
 ];
 
 const blogsInDb = async () => {
