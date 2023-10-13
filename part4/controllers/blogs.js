@@ -12,22 +12,26 @@ const getTokenFrom = (request) => {
 };
 
 blogsRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({}).populate('user', {username:1, name:1, id:1});
+  const blogs = await Blog.find({}).populate('user', {
+    username: 1,
+    name: 1,
+    id: 1,
+  });
   response.json(blogs);
 });
 
 blogsRouter.post('/', async (request, response) => {
-  const { title, url, author, likes} = request.body;
+  const body = request.body;
+  const currUser = jwt.verify(getTokenFrom(request), process.env.SECRET);
 
-  const currUser = jwt.verify(getTokenFrom, process.ENV.SECRET);
+  if (!currUser.id) {
+    return response.status(401).json({ error: 'invalid token' });
+  }
 
   const user = await User.findById(currUser.id);
 
   const blog = new Blog({
-    title,
-    url,
-    author,
-    likes,
+    ...body,
     user: user.id,
   });
 
