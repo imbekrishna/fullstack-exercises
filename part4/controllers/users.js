@@ -3,8 +3,23 @@ const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
+userRouter.get('/', async (request, response) => {
+  const users = await User.find({});
+  response.json(users);
+});
+
 userRouter.post('/', async (request, response) => {
   const { username, name, password } = request.body;
+
+  if (!username || !password) {
+    return response
+      .status(400)
+      .json({ error: 'Username/Password cannot be empty' });
+  } else if (username.length < 3 || password.length < 3) {
+    return response
+      .status(400)
+      .json({ error: 'Username/Password should have minimum length of 3' });
+  }
 
   const passwordHash = await bcrypt.hash(password, 10);
 
@@ -18,6 +33,5 @@ userRouter.post('/', async (request, response) => {
 
   response.status(201).json(user);
 });
-
 
 module.exports = userRouter;
