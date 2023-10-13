@@ -1,0 +1,9 @@
+PUT http://localhost:3001/api/blogs/65282961c98d8fc9511401f8 HTTP/1.1
+Content-Type: application/json
+
+{
+    "title": "This is third blog",
+    "author": "imbekrishna",
+    "url": "https://imbekrishna.github.io",
+    "likes": 500
+}

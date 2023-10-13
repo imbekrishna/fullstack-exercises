@@ -1,7 +1,8 @@
 import { useState } from "react";
 import loginService from "../services/login";
+import blogService from "../services/blogs";
 
-const LoginForm = ({ setUser }) => {
+const LoginForm = ({ setUser, setErrorMessage }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -9,17 +10,22 @@ const LoginForm = ({ setUser }) => {
     event.preventDefault();
     try {
       const user = await loginService.login({ username, password });
+      window.localStorage.setItem("blogAppUser", JSON.stringify(user));
+      blogService.setToken(user.token);
       setUser(user);
       setUsername("");
       setPassword("");
     } catch (error) {
-      console.error(error);
+      setErrorMessage({ message: "wrong username or password", isError: true });
     }
+
+    setTimeout(() => {
+      setErrorMessage({ message: null, isError: false });
+    }, 5000);
   };
 
   return (
     <>
-      <h1>log in to application</h1>
       <form onSubmit={handleLogin}>
         <div>
           username

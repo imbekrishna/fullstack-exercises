@@ -1,0 +1,18 @@
+# Delete note with valid id
+DELETE http://localhost:3001/api/blogs/65281a1c2e498c706d917c69 HTTP/1.1
+
+
+###
+# Delete note with invalid id
+DELETE http://localhost:3001/api/blogs/45345fdfsdfaf HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY1Mjg1NTZhYzNmZTI3YzlkZGEwYTdjZCIsImlhdCI6MTY5NzE4MzMxMywiZXhwIjoxNjk3MTg2OTEzfQ.5bBK1IzmVnaYpWCufbL2xqCs65VqBeOEpimUVKekvH4
+
+###
+# Delete valid user valid blog
+DELETE http://localhost:3001/api/blogs/65290318fa6622dbf2747496 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY1Mjg1NTZhYzNmZTI3YzlkZGEwYTdjZCIsImlhdCI6MTY5NzE4MzMxMywiZXhwIjoxNjk3MTg2OTEzfQ.5bBK1IzmVnaYpWCufbL2xqCs65VqBeOEpimUVKekvH4
+
+###
+# Delete invalid user valid blog
+DELETE http://localhost:3001/api/blogs/6528f9890f7970c9cc3124be HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOiI2NTI4ZDllNjE3MzE1ZjE0Y2VjOGVlOWQiLCJpYXQiOjE2OTcxODYxMTgsImV4cCI6MTY5NzE4OTcxOH0.hGoetqzg0oRbr7j7Hq0Yy8KzUvrEimZq_YDSqK4ZCM4
