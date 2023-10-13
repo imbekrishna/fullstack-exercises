@@ -15,13 +15,7 @@ blogsRouter.get('/', async (request, response) => {
 blogsRouter.post('/', async (request, response) => {
   const body = request.body;
 
-  const currUser = jwt.verify(request.token, process.env.SECRET);
-
-  if (!currUser.id) {
-    return response.status(401).json({ error: 'invalid token' });
-  }
-
-  const user = await User.findById(currUser.id);
+  const user = request.user;
 
   const blog = new Blog({
     ...body,
@@ -37,11 +31,7 @@ blogsRouter.post('/', async (request, response) => {
 blogsRouter.delete('/:id', async (request, response) => {
   const body = request.body;
 
-  const currUser = jwt.verify(request.token, process.env.SECRET);
-
-  if (!currUser.id) {
-    return response.status(401).json({ error: 'invalid token' });
-  }
+  const user = request.user;
 
   const blog = await Blog.findById(request.params.id);
 
@@ -49,7 +39,7 @@ blogsRouter.delete('/:id', async (request, response) => {
     return response.status(404).json({ error: 'blog not found' });
   }
 
-  if (blog.user.toString() !== currUser.id.toString()) {
+  if (blog.user.toString() !== user.id.toString()) {
     return response.status(401).json({ error: 'invalid user' });
   }
 
@@ -60,17 +50,33 @@ blogsRouter.delete('/:id', async (request, response) => {
 blogsRouter.put('/:id', async (request, response) => {
   const body = request.body;
 
-  const blog = {
+  const user = request.user;
+
+  const blog = await Blog.findById(request.params.id);
+
+  if (!blog) {
+    return response.status(404).json({ error: 'blog not found' });
+  }
+
+  if (blog.user.toString() !== user.id.toString()) {
+    return response.status(401).json({ error: 'invalid user' });
+  }
+
+  const updatedBlogBody = {
     title: body.title,
     author: body.author,
     url: body.url,
     likes: body.likes,
   };
 
-  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
-    new: true,
-    runValidators: true,
-  });
+  const updatedBlog = await Blog.findByIdAndUpdate(
+    request.params.id,
+    updatedBlogBody,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
 
   response.status(201).json(updatedBlog);
 });
