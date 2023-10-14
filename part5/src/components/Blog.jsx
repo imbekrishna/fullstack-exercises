@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import jwt_decode from 'jwt-decode';
-
+import PropTypes from 'prop-types';
 const Blog = ({ blog, likeBlog, removeBlog }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [user, setUser] = useState(null);
@@ -38,7 +38,9 @@ const Blog = ({ blog, likeBlog, removeBlog }) => {
             <div>{blog.author}</div>
             {blog.user.id === user.id ? (
               <button onClick={() => removeBlog(blog)}>remove</button>
-            ):''}
+            ) : (
+              ''
+            )}
           </div>
         )}
       </div>
@@ -46,4 +48,9 @@ const Blog = ({ blog, likeBlog, removeBlog }) => {
   );
 };
 
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  likeBlog: PropTypes.func.isRequired,
+  removeBlog: PropTypes.func.isRequired,
+};
 export default Blog;
