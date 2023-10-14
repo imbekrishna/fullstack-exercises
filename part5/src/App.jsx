@@ -5,10 +5,12 @@ import BlogForm from './components/BlogForm';
 import Notification from './components/Notification';
 import Togglable from './components/Togglable';
 import blogService from './services/blogs';
+import jwtDecode from 'jwt-decode';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
+  const [userId, setUserId] = useState(null);
   const [errorMessage, setErrorMessage] = useState({
     message: null,
     isError: false,
@@ -24,7 +26,9 @@ const App = () => {
     const blogAppUser = window.localStorage.getItem('blogAppUser');
     if (blogAppUser) {
       const user = JSON.parse(blogAppUser);
+      const parsedUser = jwtDecode(user.token);
       setUser(user);
+      setUserId(parsedUser.id);
       blogService.setToken(user.token);
     }
   }, []);
@@ -115,6 +119,7 @@ const App = () => {
                 blog={blog}
                 likeBlog={likeBlog}
                 removeBlog={removeBlog}
+                userId={userId}
               />
             ))}
         </div>
