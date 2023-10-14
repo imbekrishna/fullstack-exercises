@@ -76,7 +76,11 @@ blogsRouter.put('/:id', async (request, response) => {
       new: true,
       runValidators: true,
     }
-  );
+  ).populate('user', {
+    username: 1,
+    name: 1,
+    id: 1,
+  });
 
   response.status(201).json(updatedBlog);
 });
