@@ -1,8 +1,18 @@
-import { useState } from 'react';
-import blogService from '../services/blogs';
+import { useEffect, useState } from 'react';
+import jwt_decode from 'jwt-decode';
 
-const Blog = ({ blog, likeBlog }) => {
+const Blog = ({ blog, likeBlog, removeBlog }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const currUser = window.localStorage.getItem('blogAppUser');
+    if (currUser) {
+      const parsedUser = JSON.parse(currUser);
+      const uid = jwt_decode(parsedUser.token);
+      setUser(uid);
+    }
+  }, []);
 
   const blogStyle = {
     paddingTop: 10,
@@ -26,6 +36,9 @@ const Blog = ({ blog, likeBlog }) => {
               <button onClick={() => likeBlog(blog)}>like</button>
             </div>
             <div>{blog.author}</div>
+            {blog.user.id === user.id ? (
+              <button onClick={() => removeBlog(blog)}>remove</button>
+            ):''}
           </div>
         )}
       </div>

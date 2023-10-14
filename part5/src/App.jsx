@@ -62,6 +62,22 @@ const App = () => {
     }
   };
 
+  const removeBlog = async (blog) => {
+    try {
+      const message = `a new blog ${blog.title} by ${blog.author} added`;
+      const confirmed = window.confirm(message);
+
+      if (confirmed) {
+        const result = await blogService.remove(blog.id);
+        console.log(result);
+      }
+
+      setBlogs(blogs.filter((b) => b.id !== blog.id));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div>
       {user === null ? (
@@ -94,7 +110,12 @@ const App = () => {
           {blogs
             .sort((a, b) => b.likes - a.likes)
             .map((blog) => (
-              <Blog key={blog.id} blog={blog} likeBlog={likeBlog} />
+              <Blog
+                key={blog.id}
+                blog={blog}
+                likeBlog={likeBlog}
+                removeBlog={removeBlog}
+              />
             ))}
         </div>
       )}
