@@ -79,7 +79,6 @@ describe('<Blog/>', () => {
     await user.click(likeButton);
     await user.click(likeButton);
 
-    console.log(likeBlog.mock.calls);
     expect(likeBlog.mock.calls).toHaveLength(2);
   });
 });
