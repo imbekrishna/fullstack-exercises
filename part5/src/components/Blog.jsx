@@ -17,7 +17,7 @@ const Blog = ({ blog, likeBlog, removeBlog, userId }) => {
     marginBottom: 5,
   };
   return (
-    <div style={blogStyle}>
+    <div className='blog' style={blogStyle}>
       <div id="title-author">
         {blog.title} {blog.author}
         <button onClick={toggleVisibility}>{visible ? 'hide' : 'view'}</button>
