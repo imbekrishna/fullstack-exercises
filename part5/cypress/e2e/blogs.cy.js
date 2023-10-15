@@ -32,10 +32,41 @@ describe('Blog app', function () {
       cy.get('#password').type('janedoe');
 
       cy.get('#login-button').click();
-      cy.get('.error')
+      cy.get('.notification')
         .should('contain', 'wrong username or password')
         .should('have.css', 'color', 'rgb(255, 0, 0)')
         .should('have.css', 'border-style', 'solid');
+    });
+  });
+
+  describe('When logged in', function () {
+    beforeEach(function () {
+      cy.get('#username').type('john');
+      cy.get('#password').type('johndoe');
+
+      cy.get('#login-button').click();
+    });
+
+    it('A blog can be created', function () {
+      cy.contains('create new blog').click();
+      cy.get('#blogTitle').type('A blog from cypress');
+      cy.get('#blogAuthor').type('imbekrishna');
+      cy.get('#blogUrl').type('http://imbekrishna.github.io');
+
+      cy.get('#createBlog').click();
+
+      cy.contains('A blog from cypress');
+    });
+
+    it('user can like the blog', function(){
+      cy.contains('create new blog').click();
+      cy.get('#blogTitle').type('A blog from cypress');
+      cy.get('#blogAuthor').type('imbekrishna');
+      cy.get('#blogUrl').type('http://imbekrishna.github.io');
+
+      cy.get('#createBlog').click();
+
+      cy.contains('view').click();
     });
   });
 });

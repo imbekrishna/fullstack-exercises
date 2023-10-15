@@ -11,7 +11,7 @@ const Notification = ({ message, isError }) => {
     margin: 5,
   };
   return (
-    <div className="error" style={alertStyle}>
+    <div className="notification" style={alertStyle}>
       {message}
     </div>
   );
