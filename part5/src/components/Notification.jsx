@@ -10,7 +10,11 @@ const Notification = ({ message, isError }) => {
     borderRadius: 5,
     margin: 5,
   };
-  return <div style={alertStyle}>{message}</div>;
+  return (
+    <div className="error" style={alertStyle}>
+      {message}
+    </div>
+  );
 };
 
 Notification.propTypes = {
