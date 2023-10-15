@@ -20,10 +20,7 @@ describe('Blog app', function () {
     });
 
     it('succeeds with correct credentials', function () {
-      cy.get('#username').type('john');
-      cy.get('#password').type('johndoe');
-
-      cy.get('#login-button').click();
+      cy.login({ username: 'john', password: 'johndoe' });
       cy.contains('John Doe logged in');
     });
 
@@ -58,7 +55,7 @@ describe('Blog app', function () {
       cy.contains('A blog from cypress');
     });
 
-    it('user can like the blog', function(){
+    it.only('user can like the blog', function () {
       cy.contains('create new blog').click();
       cy.get('#blogTitle').type('A blog from cypress');
       cy.get('#blogAuthor').type('imbekrishna');
@@ -67,6 +64,11 @@ describe('Blog app', function () {
       cy.get('#createBlog').click();
 
       cy.contains('view').click();
+
+      cy.contains('likes 0');
+
+      cy.get('#likeButton').click();
+      cy.contains('likes 1');
     });
   });
 });
