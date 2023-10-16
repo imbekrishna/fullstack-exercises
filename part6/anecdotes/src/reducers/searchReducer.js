@@ -1,16 +1,17 @@
-const searchReducer = (state = '', action) => {
-  if (action.type === 'SEARCH') {
-    return action.payload;
-  }
+import { createSlice } from '@reduxjs/toolkit';
 
-  return state;
-};
+const searcSlice = createSlice({
+  name: 'search',
+  initialState: '',
+  reducers: {
+    searchChange(state, action) {
+      if (!action) {
+        return state;
+      }
+      return action.payload;
+    },
+  },
+});
 
-export const searchChange = (search) => {
-  return {
-    type: 'SEARCH',
-    payload: search,
-  };
-};
-
-export default searchReducer;
+export const { searchChange } = searcSlice.actions;
+export default searcSlice.reducer;
