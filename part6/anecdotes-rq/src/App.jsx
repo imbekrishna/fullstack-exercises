@@ -1,11 +1,12 @@
 import AnecdoteForm from './components/AnecdoteForm';
 import Notification from './components/Notification';
 import { getAll, update } from './requests';
-
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useNotificationDispatch } from './helpers/contextHelper';
 
 const App = () => {
   const queryClient = useQueryClient();
+  const notificationDispatch = useNotificationDispatch();
 
   const updateMutation = useMutation(update, {
     onSuccess: (updatedAnecdote) => {
@@ -16,6 +17,8 @@ const App = () => {
           and.id === updatedAnecdote.id ? updatedAnecdote : and
         )
       );
+
+      notificationDispatch(`you voted '${updatedAnecdote.content}'`);
     },
   });
 
@@ -41,7 +44,7 @@ const App = () => {
   const anecdotes = data;
 
   return (
-    <div>
+    <>
       <h3>Anecdote app</h3>
 
       <Notification />
@@ -56,7 +59,7 @@ const App = () => {
           </div>
         </div>
       ))}
-    </div>
+    </>
   );
 };
 
