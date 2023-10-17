@@ -1,12 +1,30 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
-const Blog = ({ blog, likeBlog, removeBlog, userId }) => {
-  const [visible, setVisible] = useState(false);
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteBlog, likeBlog } from '../app/blogSlice';
 
+const Blog = ({ blog }) => {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
+
+  const [visible, setVisible] = useState(false);
   const showWhenVisible = { display: visible ? '' : 'none' };
 
   const toggleVisibility = () => {
     setVisible(!visible);
+  };
+
+  const removeBlog = async (blog) => {
+    try {
+      const message = `a new blog ${blog.title} by ${blog.author} added`;
+      const confirmed = window.confirm(message);
+
+      if (confirmed) {
+        dispatch(deleteBlog(blog.id));
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const blogStyle = {
@@ -17,7 +35,7 @@ const Blog = ({ blog, likeBlog, removeBlog, userId }) => {
     marginBottom: 5,
   };
   return (
-    <div className='blog' style={blogStyle}>
+    <div className="blog" style={blogStyle}>
       <div id="title-author">
         {blog.title} {blog.author}
         <button onClick={toggleVisibility}>{visible ? 'hide' : 'view'}</button>
@@ -27,10 +45,12 @@ const Blog = ({ blog, likeBlog, removeBlog, userId }) => {
           </a>
           <div>
             likes {blog.likes}{' '}
-            <button id='likeButton' onClick={() => likeBlog(blog)}>like</button>
+            <button id="likeButton" onClick={() => dispatch(likeBlog(blog.id))}>
+              like
+            </button>
           </div>
           <div>{blog.user.name}</div>
-          {blog.user.id === userId ? (
+          {blog.user.id === user.user_id ? (
             <button onClick={() => removeBlog(blog)}>remove</button>
           ) : (
             ''
@@ -43,8 +63,5 @@ const Blog = ({ blog, likeBlog, removeBlog, userId }) => {
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  likeBlog: PropTypes.func.isRequired,
-  removeBlog: PropTypes.func.isRequired,
-  userId: PropTypes.string.isRequired,
 };
 export default Blog;

@@ -74,3 +74,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb
     "author": "imbekrishna",
     "url": "https://imbekrishna.github.io"
 }
+
+###
+#like a blog
+POST http://localhost:3001/api/blogs/like/6528f0c42979ed4a94ecdaf4 HTTP/1.1

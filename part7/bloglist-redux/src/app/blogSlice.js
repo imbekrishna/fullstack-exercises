@@ -52,4 +52,11 @@ export const updateBlog = (id, updated) => {
   };
 };
 
+export const likeBlog = (id) => {
+  return async (dispatch) => {
+    const blog = await blogService.like(id);
+    dispatch(update(blog));
+  };
+};
+
 export default blogSlice.reducer;

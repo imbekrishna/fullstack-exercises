@@ -29,4 +29,9 @@ const remove = async (id) => {
   return response.data;
 };
 
-export default { getAll, create, update, remove, setToken };
+const like = async (id) => {
+  const response = await axios.post(`${baseUrl}/like/${id}`);
+  return response.data;
+};
+
+export default { getAll, create, update, remove, like, setToken };

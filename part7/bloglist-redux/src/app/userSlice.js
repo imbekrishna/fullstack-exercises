@@ -12,7 +12,7 @@ const userSlice = createSlice({
       }
       return state;
     },
-    getUser: (state, action) => {
+    getUser: () => {
       const blogAppUser = window.localStorage.getItem('blogAppUser');
       if (blogAppUser) {
         const user = JSON.parse(blogAppUser);
@@ -20,7 +20,7 @@ const userSlice = createSlice({
         return user;
       }
     },
-    removeUser: (state, action) => {
+    removeUser: () => {
       window.localStorage.removeItem('blogAppUser');
       return null;
     },
