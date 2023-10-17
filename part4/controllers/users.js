@@ -39,4 +39,18 @@ userRouter.post('/', async (request, response) => {
   response.status(201).json(user);
 });
 
+userRouter.get('/summary', async (request, response) => {
+  const result = await User.aggregate([
+    {
+      $project: {
+        _id: 1,
+        name: 1,
+        blogCount: { $size: '$blogs' },
+      },
+    },
+  ]);
+
+  response.json(result);
+});
+
 module.exports = userRouter;
