@@ -1,10 +1,9 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import Blog from './components/Blog';
 import LoginForm from './components/LoginForm';
 import BlogForm from './components/BlogForm';
 import Notification from './components/Notification';
 import Togglable from './components/Togglable';
-import blogService from './services/blogs';
 import { useDispatch, useSelector } from 'react-redux';
 import { setMessage } from './app/notificationSlice';
 import {
@@ -14,30 +13,19 @@ import {
   updateBlog,
 } from './app/blogSlice';
 
+import { getUser, removeUser } from './app/userSlice';
+
 const App = () => {
   const dispatch = useDispatch();
-  const blogs = useSelector(({ blogs }) => blogs);
-  const [user, setUser] = useState(null);
+  const blogs = useSelector((store) => store.blogs);
+  const user = useSelector((store) => store.user);
 
   const blogFormRef = useRef();
 
   useEffect(() => {
+    dispatch(getUser());
     dispatch(initalizeBlog());
   }, []);
-
-  useEffect(() => {
-    const blogAppUser = window.localStorage.getItem('blogAppUser');
-    if (blogAppUser) {
-      const user = JSON.parse(blogAppUser);
-      setUser(user);
-      blogService.setToken(user.token);
-    }
-  }, []);
-
-  const handleLogout = () => {
-    window.localStorage.removeItem('blogAppUser');
-    setUser(null);
-  };
 
   const addBlog = async ({ title, author, url }) => {
     blogFormRef.current.toggleVisibility();
@@ -86,14 +74,15 @@ const App = () => {
         <div>
           <h1>log in to application</h1>
           <Notification />
-          <LoginForm setUser={setUser} />
+          <LoginForm />
         </div>
       ) : (
         <div>
           <h2>blogs</h2>
           <Notification />
           <p>
-            {user.name} logged in <button onClick={handleLogout}>logout</button>
+            {user.name} logged in{' '}
+            <button onClick={() => dispatch(removeUser())}>logout</button>
           </p>
 
           <Togglable buttonLabel="create new blog" ref={blogFormRef}>
