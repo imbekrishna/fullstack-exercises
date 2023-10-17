@@ -48,7 +48,7 @@ userRouter.get('/summary', async (request, response) => {
         blogCount: { $size: '$blogs' },
       },
     },
-  ]);
+  ]).sort({ blogCount: -1 });
 
   response.json(result);
 });

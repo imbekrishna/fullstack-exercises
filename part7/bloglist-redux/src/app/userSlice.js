@@ -12,13 +12,14 @@ const userSlice = createSlice({
       }
       return state;
     },
-    getUser: () => {
+    getUser: (state) => {
       const blogAppUser = window.localStorage.getItem('blogAppUser');
       if (blogAppUser) {
         const user = JSON.parse(blogAppUser);
         blogService.setToken(user.token);
         return user;
       }
+      return state;
     },
     removeUser: () => {
       window.localStorage.removeItem('blogAppUser');

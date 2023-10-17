@@ -1,9 +1,19 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { removeUser } from '../app/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUser, removeUser } from '../app/userSlice';
+import { useEffect } from 'react';
 
-const User = ({ user }) => {
+const User = () => {
   const dispatch = useDispatch();
+  const user = useSelector((store) => store.user);
+
+  useEffect(() => {
+    dispatch(getUser());
+  }, []);
+
+  if (!user) {
+    return;
+  }
+
   return (
     <p>
       {user.name} logged in{' '}

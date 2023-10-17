@@ -34,4 +34,9 @@ const like = async (id) => {
   return response.data;
 };
 
-export default { getAll, create, update, remove, like, setToken };
+const summary = async () => {
+  const response = await axios.get('/api/users/summary');
+  return response.data;
+};
+
+export default { getAll, create, update, remove, like, summary, setToken };

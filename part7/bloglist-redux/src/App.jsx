@@ -4,39 +4,38 @@ import LoginForm from './components/LoginForm';
 import BlogForm from './components/BlogForm';
 import Notification from './components/Notification';
 import User from './components/User';
+import Users from './components/Users';
 import { useDispatch, useSelector } from 'react-redux';
-import { initalizeBlog, deleteBlog, updateBlog } from './app/blogSlice';
+import { initalizeBlog } from './app/blogSlice';
+import { Routes, Route } from 'react-router-dom';
 
-import { getUser, removeUser } from './app/userSlice';
+import { getUser } from './app/userSlice';
 
 const App = () => {
   const dispatch = useDispatch();
-  const blogs = useSelector((store) => store.blogs);
-  const user = useSelector((store) => store.user);
-
-  useEffect(() => {
-    dispatch(getUser());
-    dispatch(initalizeBlog());
-  }, []);
 
   return (
     <div>
       <h2>Blogs</h2>
       <Notification />
-      {user === null ? (
-        <div>
-          <h1>log in to application</h1>
-          <LoginForm />
-        </div>
-      ) : (
-        <div>
-          <User user={user} />
-          <BlogForm />
-          <BlogList />
-        </div>
-      )}
+      <User />
+      <Routes>
+        <Route path="/users" element={<Users />} />
+        <Route path="/" element={<Home />} />
+      </Routes>
     </div>
   );
 };
 
 export default App;
+
+const Home = () => {
+  return (
+    <>
+      <div>
+        <BlogForm />
+        <BlogList />
+      </div>
+    </>
+  );
+};
