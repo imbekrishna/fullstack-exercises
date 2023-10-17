@@ -27,9 +27,9 @@ const LoginForm = ({ setUser }) => {
       );
     }
 
-    // setTimeout(() => {
-    //   dispatch(setMessage({ message: null }));
-    // }, 5000);
+    setTimeout(() => {
+      dispatch(setMessage({ message: null }));
+    }, 5000);
   };
 
   return (
@@ -65,7 +65,6 @@ const LoginForm = ({ setUser }) => {
 
 LoginForm.propTypes = {
   setUser: PropTypes.func.isRequired,
-  setErrorMessage: PropTypes.func.isRequired,
 };
 
 export default LoginForm;
