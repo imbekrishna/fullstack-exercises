@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { setMessage } from '../app/notificationSlice';
 import { useDispatch } from 'react-redux';
-import { loginUser } from '../app/userSlice';
+import { loginUser } from '../app/accountSlice';
 
 const LoginForm = () => {
   const [username, setUsername] = useState('');

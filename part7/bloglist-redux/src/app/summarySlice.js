@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import blogService from '../services/blogs';
+import userService from '../services/users';
 
 const summarySlice = createSlice({
   name: 'summary',
@@ -19,7 +19,7 @@ export const { setSummary } = summarySlice.actions;
 
 export const getSummary = () => {
   return async (dispatch) => {
-    const response = await blogService.summary();
+    const response = await userService.summary();
     dispatch(setSummary(response));
   };
 };

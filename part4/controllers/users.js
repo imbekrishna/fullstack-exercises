@@ -13,6 +13,31 @@ userRouter.get('/', async (request, response) => {
   response.json(users);
 });
 
+userRouter.get('/summary', async (request, response) => {
+  const result = await User.aggregate([
+    {
+      $project: {
+        _id: 1,
+        name: 1,
+        blogCount: { $size: '$blogs' },
+      },
+    },
+  ]).sort({ blogCount: -1 });
+
+  response.json(result);
+});
+
+userRouter.get('/:id', async (request, response) => {
+  const id = request.params.id;
+  const user = await User.findById(id).populate('blogs', {
+    url: 1,
+    title: 1,
+    author: 1,
+    id: 1,
+  });
+  response.json({ name: user.name, blogs: user.blogs });
+});
+
 userRouter.post('/', async (request, response) => {
   const { username, name, password } = request.body;
 
@@ -37,20 +62,6 @@ userRouter.post('/', async (request, response) => {
   const user = await newUser.save();
 
   response.status(201).json(user);
-});
-
-userRouter.get('/summary', async (request, response) => {
-  const result = await User.aggregate([
-    {
-      $project: {
-        _id: 1,
-        name: 1,
-        blogCount: { $size: '$blogs' },
-      },
-    },
-  ]).sort({ blogCount: -1 });
-
-  response.json(result);
 });
 
 module.exports = userRouter;

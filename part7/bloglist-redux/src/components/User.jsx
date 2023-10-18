@@ -1,24 +1,28 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { getUser, removeUser } from '../app/userSlice';
-import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import userService from '../services/users';
 
 const User = () => {
-  const dispatch = useDispatch();
-  const user = useSelector((store) => store.user);
+  const id = useParams().id;
+  const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {
-    dispatch(getUser());
-  }, []);
+    userService.getUser(id).then((response) => setUserInfo(response));
+  }, [id]);
 
-  if (!user) {
+  if (!userInfo) {
     return;
   }
-
   return (
-    <p>
-      {user.name} logged in{' '}
-      <button onClick={() => dispatch(removeUser())}>logout</button>
-    </p>
+    <div>
+      <h2>{userInfo.name}</h2>
+      <p>added blogs</p>
+      <ul>
+        {userInfo.blogs.map((blog) => (
+          <li key={blog.id}>{blog.title}</li>
+        ))}
+      </ul>
+    </div>
   );
 };
 
