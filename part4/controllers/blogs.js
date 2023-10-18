@@ -61,8 +61,6 @@ blogsRouter.post('/:id/comments', async (request, response) => {
 
   const updated = await Blog.populate(blog, populateField);
 
-  console.log(updated);
-
   response.status(201).json(updated);
 });
 
