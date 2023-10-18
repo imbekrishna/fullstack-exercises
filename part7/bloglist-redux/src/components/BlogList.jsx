@@ -5,10 +5,6 @@ import { initalizeBlog } from '../app/blogSlice';
 
 const BlogList = () => {
   const blogs = useSelector((state) => state.blogs);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(initalizeBlog());
-  }, []);
 
   return (
     <div>

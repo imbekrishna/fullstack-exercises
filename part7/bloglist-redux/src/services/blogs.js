@@ -11,6 +11,11 @@ const getAll = async () => {
   return response.data;
 };
 
+const getOne = async (id) => {
+  const response = await axios.get(`${baseUrl}/${id}`);
+  return response.data;
+};
+
 const create = async (newBlog) => {
   const config = { headers: { Authorization: `Bearer ${bearerToken}` } };
   const response = await axios.post(baseUrl, newBlog, config);
@@ -34,4 +39,4 @@ const like = async (id) => {
   return response.data;
 };
 
-export default { getAll, create, update, remove, like, setToken };
+export default { getAll, getOne, create, update, remove, like, setToken };

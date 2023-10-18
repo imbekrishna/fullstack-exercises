@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import userService from '../services/users';
 
 const User = () => {
@@ -19,7 +19,9 @@ const User = () => {
       <p>added blogs</p>
       <ul>
         {userInfo.blogs.map((blog) => (
-          <li key={blog.id}>{blog.title}</li>
+          <li key={blog.id}>
+            <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+          </li>
         ))}
       </ul>
     </div>

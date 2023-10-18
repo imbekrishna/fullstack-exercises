@@ -11,6 +11,14 @@ blogsRouter.get('/', async (request, response) => {
   });
   response.json(blogs);
 });
+blogsRouter.get('/:id', async (request, response) => {
+  const blogs = await Blog.findById(request.params.id).populate('user', {
+    username: 1,
+    name: 1,
+    id: 1,
+  });
+  response.json(blogs);
+});
 
 blogsRouter.post('/', async (request, response) => {
   const body = request.body;
