@@ -1,13 +1,16 @@
-import { useQuery } from '@tanstack/react-query';
+import { QueryClient, useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { summary } from '../services/users';
 import { Link } from 'react-router-dom';
 import Table from 'react-bootstrap/Table';
 
 const Users = () => {
+  const [queryClient] = React.useState(() => new QueryClient());
+
   const userSummary = useQuery({
     queryKey: ['userSummary'],
     queryFn: summary,
+    refetchOnMount: true,
   });
 
   if (userSummary.isLoading) {
@@ -17,8 +20,6 @@ const Users = () => {
   if (!userSummary.data) {
     return;
   }
-
-  console.log(userSummary.status);
 
   const users = userSummary.data;
 

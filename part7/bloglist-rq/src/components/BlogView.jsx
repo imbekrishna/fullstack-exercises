@@ -33,9 +33,6 @@ const BlogView = () => {
   }
 
   const blog = blogInfo.data;
-
-  console.log(blog);
-
   const onSubmit = (event) => {
     event.preventDefault();
     const newComment = event.target.body.value;

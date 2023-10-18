@@ -6,31 +6,28 @@ import { getUser } from '../services/users';
 const User = () => {
   const id = useParams().id;
 
-  const userInfo = useQuery({
-    queryKey: ['userSummary'],
+  const { data, isLoading } = useQuery({
+    queryKey: ['userInfo'],
     queryFn: () => getUser(id),
+    refetchOnMount: true,
   });
-
-  if (userInfo.isLoading) {
-    return <p>loading...</p>;
-  }
-  if (!userInfo) {
-    return;
-  }
-
-  const user = userInfo.data;
-
   return (
     <div>
-      <h2>{user.name}</h2>
-      <p>added blogs</p>
-      <ul>
-        {user.blogs.map((blog) => (
-          <li key={blog.id}>
-            <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-          </li>
-        ))}
-      </ul>
+      {isLoading ? (
+        <b> Loading .. </b>
+      ) : (
+        <div>
+          <h2>{data.name}</h2>
+          <p>added blogs</p>
+          <ul>
+            {data.blogs.map((blog) => (
+              <li key={blog.id}>
+                <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

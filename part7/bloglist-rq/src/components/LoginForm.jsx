@@ -4,6 +4,7 @@ import blogService from '../services/blogs';
 import loginService from '../services/login';
 import { useNotificationDispatch } from '../helpers/NotificationContext';
 import { useNavigate } from 'react-router-dom';
+import { Button, Container, Form } from 'react-bootstrap';
 
 const LoginForm = () => {
   const [username, setUsername] = useState('');
@@ -28,33 +29,33 @@ const LoginForm = () => {
   };
 
   return (
-    <>
-      <form onSubmit={handleLogin}>
-        <div>
-          username
-          <input
+    <Container>
+      <Form onSubmit={handleLogin}>
+        <Form.Group>
+          <Form.Label>Username</Form.Label>
+          <Form.Control
             id="username"
             type="text"
             value={username}
             name="Username"
             onChange={({ target }) => setUsername(target.value)}
           />
-        </div>
-        <div>
+        </Form.Group>
+        <Form.Group>
           password
-          <input
+          <Form.Control
             id="password"
             type="password"
             value={password}
             name="Password"
             onChange={({ target }) => setPassword(target.value)}
           />
-        </div>
-        <button id="login-button" type="submit">
+        </Form.Group>
+        <Button className="mt-3" id="login-button" type="submit">
           login
-        </button>
-      </form>
-    </>
+        </Button>
+      </Form>
+    </Container>
   );
 };
 

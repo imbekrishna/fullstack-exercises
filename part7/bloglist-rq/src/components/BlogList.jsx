@@ -3,9 +3,8 @@ import React from 'react';
 import { useUser } from '../helpers/UserContext';
 import { getAll } from '../services/blogs';
 import Blog from './Blog';
-
+import Table from 'react-bootstrap/Table';
 const BlogList = () => {
-  const user = useUser();
 
   const result = useQuery({
     queryKey: ['blogs'],
@@ -19,13 +18,21 @@ const BlogList = () => {
 
   const blogs = result.data;
   return (
-    <div>
-      {blogs
-        .sort((a, b) => b.likes - a.likes)
-        .map((blog) => (
-          <Blog key={blog.id} blog={blog} userId={user.user_id} />
-        ))}
-    </div>
+    <Table className="blog">
+      <thead>
+        <tr>
+          <td>Title</td>
+          <td>Author</td>
+        </tr>
+      </thead>
+      <tbody>
+        {blogs
+          .sort((a, b) => b.likes - a.likes)
+          .map((blog) => (
+            <Blog key={blog.id} blog={blog} />
+          ))}
+      </tbody>
+    </Table>
   );
 };
 

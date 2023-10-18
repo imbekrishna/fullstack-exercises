@@ -38,11 +38,6 @@ const NavbarCrumb = () => {
             </Link>
           </Nav.Link>
           <Nav.Link href="#" as="span">
-            <Link style={padding} to="/notes">
-              notes
-            </Link>
-          </Nav.Link>
-          <Nav.Link href="#" as="span">
             <Link style={padding} to="/users">
               users
             </Link>
