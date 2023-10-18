@@ -1,47 +1,32 @@
-import { useContext, useEffect } from 'react';
+import Container from 'react-bootstrap/esm/Container';
+import { Route, Routes } from 'react-router-dom';
 import BlogForm from './components/BlogForm';
 import BlogList from './components/BlogList';
-import LoginForm from './components/LoginForm';
+import NavbarCrumb from './components/Navbar';
 import Notification from './components/Notification';
-import UserContext from './helpers/UserContext';
-import blogService from './services/blogs';
+import Users from './components/Users';
 
 const App = () => {
-  const [user, setUser] = useContext(UserContext);
-  useEffect(() => {
-    const blogAppUser = window.localStorage.getItem('blogAppUser');
-    if (blogAppUser) {
-      const user = JSON.parse(blogAppUser);
-      setUser({ type: 'SET', payload: user });
-      blogService.setToken(user.token);
-    }
-  }, []);
-
-  const handleLogout = () => {
-    window.localStorage.removeItem('blogAppUser');
-    setUser({ type: 'UNSET' });
-  };
-
   return (
-    <div>
+    <Container>
+      <NavbarCrumb />
       <Notification />
-      {user === null ? (
-        <div>
-          <h1>log in to application</h1>
-          <LoginForm />
-        </div>
-      ) : (
-        <div>
-          <h2>Blogs</h2>
-          <p>
-            {user.name} logged in <button onClick={handleLogout}>logout</button>
-          </p>
-          <BlogForm />
-          <br />
-          <BlogList />
-        </div>
-      )}
-    </div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/users" element={<Users />} />
+      </Routes>
+    </Container>
+  );
+};
+
+const Home = () => {
+  return (
+    <>
+      <h2>Blogs</h2>
+      <BlogForm />
+      <br />
+      <BlogList />
+    </>
   );
 };
 

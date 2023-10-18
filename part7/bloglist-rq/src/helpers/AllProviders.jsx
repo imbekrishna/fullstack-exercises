@@ -8,15 +8,20 @@ const queryClient = new QueryClient();
 
 const CombineProviders = (providers) =>
   providers.reduce(
-    (AccumulatedProviders, [Provider, props = {}]) =>
-      ({ children }) =>
-        (
-          <AccumulatedProviders>
-            <Provider {...props}>
-              <>{children}</>
-            </Provider>
-          </AccumulatedProviders>
-        ),
+    (AccumulatedProviders, [Provider, props = {}]) => {
+      const WrappedProvider = ({ children }) => (
+        <AccumulatedProviders>
+          <Provider {...props}>
+            <>{children}</>
+          </Provider>
+        </AccumulatedProviders>
+      );
+      WrappedProvider.displayName = `CombineProviders(${
+        Provider.displayName || Provider.name || 'Unknown'
+      })`;
+
+      return WrappedProvider;
+    },
     ({ children }) => <>{children}</>
   );
 
