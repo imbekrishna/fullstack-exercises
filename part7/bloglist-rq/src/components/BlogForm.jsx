@@ -91,8 +91,4 @@ const BlogForm = () => {
   );
 };
 
-BlogForm.propTypes = {
-  addBlog: PropTypes.func.isRequired,
-};
-
 export default BlogForm;

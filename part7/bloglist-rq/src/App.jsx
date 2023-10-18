@@ -6,30 +6,13 @@ import LoginForm from './components/LoginForm';
 import Notification from './components/Notification';
 import { useNotificationDispatch } from './helpers/NotificationContext';
 import getError from './helpers/getError';
-import blogService, { getAll, likeBlog, removeBlog } from './services/blogs';
+import blogService, { getAll } from './services/blogs';
 import UserContext from './helpers/UserContext';
 
 const App = () => {
   const queryClient = useQueryClient();
-  const setErrorMessage = useNotificationDispatch();
 
   const [user, setUser] = useContext(UserContext);
-
-  const updateBlogMutation = useMutation({
-    mutationFn: likeBlog,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['blogs'] });
-    },
-  });
-  const removeBlogMutation = useMutation({
-    mutationFn: removeBlog,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['blogs'] });
-    },
-    onError: (error) => {
-      setErrorMessage({ message: getError(error), isError: false });
-    },
-  });
 
   const result = useQuery({
     queryKey: ['blogs'],
@@ -41,7 +24,7 @@ const App = () => {
     const blogAppUser = window.localStorage.getItem('blogAppUser');
     if (blogAppUser) {
       const user = JSON.parse(blogAppUser);
-      setUser(user);
+      setUser({ type: 'SET', payload: user });
       blogService.setToken(user.token);
     }
   }, []);
@@ -49,20 +32,6 @@ const App = () => {
   const handleLogout = () => {
     window.localStorage.removeItem('blogAppUser');
     setUser({ type: 'UNSET' });
-  };
-
-  const deleteBlog = async (blog) => {
-    try {
-      const message = `a new blog ${blog.title} by ${blog.author} added`;
-      const confirmed = window.confirm(message);
-
-      if (confirmed) {
-        removeBlogMutation.mutate(blog.id);
-        setErrorMessage({ message: 'Blog deleted', isError: false });
-      }
-    } catch (error) {
-      setErrorMessage({ message: error.message, isError: true });
-    }
   };
 
   if (result.isLoading) {
@@ -77,7 +46,7 @@ const App = () => {
       {user === null ? (
         <div>
           <h1>log in to application</h1>
-          <LoginForm setUser={setUser} setErrorMessage={setErrorMessage} />
+          <LoginForm />
         </div>
       ) : (
         <div>
@@ -90,13 +59,7 @@ const App = () => {
           {blogs
             .sort((a, b) => b.likes - a.likes)
             .map((blog) => (
-              <Blog
-                key={blog.id}
-                blog={blog}
-                likeBlog={() => updateBlogMutation.mutate(blog.id)}
-                removeBlog={deleteBlog}
-                userId={user.user_id}
-              />
+              <Blog key={blog.id} blog={blog} userId={user.user_id} />
             ))}
         </div>
       )}
