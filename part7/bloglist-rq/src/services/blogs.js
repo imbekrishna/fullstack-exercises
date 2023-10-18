@@ -27,4 +27,8 @@ export const removeBlog = (id) => {
   return axios.delete(`${baseUrl}/${id}`, config).then((res) => res.data);
 };
 
+export const likeBlog = (id) => {
+  return axios.post(`${baseUrl}/like/${id}`).then((res) => res.data);
+};
+
 export default { setToken };

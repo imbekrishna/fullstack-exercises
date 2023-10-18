@@ -1,9 +1,8 @@
-import PropTypes from 'prop-types';
-import { useContext } from 'react';
-import NotificationContext from '../helpers/NotificationContext';
+import { useNotificationVal } from '../helpers/NotificationContext';
 
 const Notification = () => {
-  const [notification, dispatch] = useContext(NotificationContext);
+  const notification = useNotificationVal();
+
   const alertStyle = {
     color: notification.isError ? 'red' : 'green',
     fontSize: 24,
