@@ -12,6 +12,7 @@
     "cypress:open": "cypress open"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.0.0",
     "axios": "^1.4.0",
     "jwt-decode": "^3.1.2",
     "prop-types": "^15.8.1",

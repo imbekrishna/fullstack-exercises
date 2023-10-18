@@ -5,20 +5,46 @@ import BlogForm from './components/BlogForm';
 import Notification from './components/Notification';
 import Togglable from './components/Togglable';
 import blogService from './services/blogs';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { getAll, createBlog, updateBlog, removeBlog } from './services/blogs';
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
+  const queryClient = useQueryClient();
+
   const [user, setUser] = useState(null);
   const [errorMessage, setErrorMessage] = useState({
     message: null,
     isError: false,
   });
 
+  const newBlogMutation = useMutation({
+    mutationFn: createBlog,
+    onSuccess: (newBlog) => {
+      const blogs = queryClient.getQueryData(['blogs']);
+      queryClient.setQueryData(['blogs'], blogs.concat(newBlog));
+    },
+  });
+  const updateBlogMutation = useMutation({
+    mutationFn: updateBlog,
+    onSuccess: (newBlog) => {
+      const blogs = queryClient.getQueryData(['blogs']);
+      queryClient.setQueryData(['blogs'], blogs.concat(newBlog));
+    },
+  });
+  const removeBlogMutation = useMutation({
+    mutationFn: removeBlog,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['blogs'] });
+    },
+  });
+
   const blogFormRef = useRef();
 
-  useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
-  }, []);
+  const result = useQuery({
+    queryKey: ['blogs'],
+    queryFn: getAll,
+    refetchOnWindowFocus: false,
+  });
 
   useEffect(() => {
     const blogAppUser = window.localStorage.getItem('blogAppUser');
@@ -37,10 +63,9 @@ const App = () => {
   const addBlog = async ({ title, author, url }) => {
     blogFormRef.current.toggleVisibility();
     try {
-      const blog = await blogService.create({ title, author, url });
-      const message = `a new blog ${blog.title} by ${blog.author} added`;
+      newBlogMutation.mutate({ title, author, url });
+      const message = `a new blog ${title} by ${author} added`;
       setErrorMessage({ message: message, isError: false });
-      setBlogs([...blogs, blog]);
     } catch (error) {
       console.error(error);
       setErrorMessage({ message: error.message, isError: true });
@@ -52,31 +77,34 @@ const App = () => {
 
   const likeBlog = async (blog) => {
     try {
-      const result = await blogService.update(blog.id, {
+      console.log(blog);
+      updateBlogMutation.mutate({
         ...blog,
         likes: blog.likes + 1,
       });
-      setBlogs(blogs.map((b) => (b.id === blog.id ? result : b)));
     } catch (error) {
       console.log(error);
     }
   };
 
-  const removeBlog = async (blog) => {
+  const deleteBlog = async (blog) => {
     try {
       const message = `a new blog ${blog.title} by ${blog.author} added`;
       const confirmed = window.confirm(message);
 
       if (confirmed) {
-        const result = await blogService.remove(blog.id);
-        console.log(result);
+        removeBlogMutation.mutate(blog.id);
       }
-
-      setBlogs(blogs.filter((b) => b.id !== blog.id));
     } catch (error) {
       console.log(error);
     }
   };
+
+  if (result.isLoading) {
+    return <div>loading</div>;
+  }
+
+  const blogs = result.data;
 
   return (
     <div>
@@ -114,7 +142,7 @@ const App = () => {
                 key={blog.id}
                 blog={blog}
                 likeBlog={likeBlog}
-                removeBlog={removeBlog}
+                removeBlog={deleteBlog}
                 userId={user.user_id}
               />
             ))}
