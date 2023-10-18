@@ -25,6 +25,10 @@ const App = () => {
     padding: 5,
   };
 
+  if (!user) {
+    return <LoginForm />;
+  }
+
   return (
     <div>
       <div>

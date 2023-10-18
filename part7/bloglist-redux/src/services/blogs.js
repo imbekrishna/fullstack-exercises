@@ -22,9 +22,13 @@ const create = async (newBlog) => {
   return response.data;
 };
 
-const comment = async (newComment) => {
+const comment = async (id, newComment) => {
   const config = { headers: { Authorization: `Bearer ${bearerToken}` } };
-  const response = await axios.post(baseUrl, newComment, config);
+  const response = await axios.post(
+    `${baseUrl}/${id}/comments`,
+    { body: newComment },
+    config
+  );
   return response.data;
 };
 

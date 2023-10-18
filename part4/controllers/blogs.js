@@ -55,9 +55,9 @@ blogsRouter.post('/:id/comments', async (request, response) => {
   await user.save();
 
   blog.comments = blog.comments.concat(result._id);
-  await blog.save();
+  const updated = await Blog.populate(blog, populateField);
 
-  response.status(201).json(blog);
+  response.status(201).json(updated);
 });
 
 blogsRouter.delete('/:id', async (request, response) => {
