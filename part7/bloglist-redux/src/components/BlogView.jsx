@@ -21,6 +21,13 @@ const BlogView = () => {
         <button onClick={() => dispatch(likeBlog(blog.id))}>like</button>
       </p>
       <p>added by {blog.user.name}</p>
+
+      <h3>comments</h3>
+      <ul>
+        {blog.comments.map((c) => (
+          <li key={c.id}>{c.body}</li>
+        ))}
+      </ul>
     </div>
   );
 };

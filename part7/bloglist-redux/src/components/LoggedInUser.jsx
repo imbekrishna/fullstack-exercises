@@ -6,19 +6,15 @@ const LoggedInUser = () => {
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
 
-  useEffect(() => {
-    dispatch(getUser());
-  }, []);
-
   if (!user) {
     return;
   }
 
   return (
-    <p>
+    <span>
       {user.name} logged in{' '}
       <button onClick={() => dispatch(removeUser())}>logout</button>
-    </p>
+    </span>
   );
 };
 

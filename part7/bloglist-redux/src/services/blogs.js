@@ -22,6 +22,12 @@ const create = async (newBlog) => {
   return response.data;
 };
 
+const comment = async (newComment) => {
+  const config = { headers: { Authorization: `Bearer ${bearerToken}` } };
+  const response = await axios.post(baseUrl, newComment, config);
+  return response.data;
+};
+
 const update = async (id, updatedBlog) => {
   const config = { headers: { Authorization: `Bearer ${bearerToken}` } };
   const response = await axios.put(`${baseUrl}/${id}`, updatedBlog, config);
@@ -39,4 +45,13 @@ const like = async (id) => {
   return response.data;
 };
 
-export default { getAll, getOne, create, update, remove, like, setToken };
+export default {
+  getAll,
+  getOne,
+  create,
+  comment,
+  update,
+  remove,
+  like,
+  setToken,
+};
