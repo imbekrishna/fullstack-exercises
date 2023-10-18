@@ -8,18 +8,10 @@ import { useNotificationDispatch } from './helpers/NotificationContext';
 import getError from './helpers/getError';
 import blogService, { getAll } from './services/blogs';
 import UserContext from './helpers/UserContext';
+import BlogList from './components/BlogList';
 
 const App = () => {
-  const queryClient = useQueryClient();
-
   const [user, setUser] = useContext(UserContext);
-
-  const result = useQuery({
-    queryKey: ['blogs'],
-    queryFn: getAll,
-    refetchOnWindowFocus: false,
-  });
-
   useEffect(() => {
     const blogAppUser = window.localStorage.getItem('blogAppUser');
     if (blogAppUser) {
@@ -34,12 +26,6 @@ const App = () => {
     setUser({ type: 'UNSET' });
   };
 
-  if (result.isLoading) {
-    return <div>loading</div>;
-  }
-
-  const blogs = result.data;
-
   return (
     <div>
       <Notification />
@@ -50,17 +36,13 @@ const App = () => {
         </div>
       ) : (
         <div>
-          <h2>blogs</h2>
+          <h2>Blogs</h2>
           <p>
             {user.name} logged in <button onClick={handleLogout}>logout</button>
           </p>
-
           <BlogForm />
-          {blogs
-            .sort((a, b) => b.likes - a.likes)
-            .map((blog) => (
-              <Blog key={blog.id} blog={blog} userId={user.user_id} />
-            ))}
+          <br />
+          <BlogList />
         </div>
       )}
     </div>

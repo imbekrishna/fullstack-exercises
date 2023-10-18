@@ -58,9 +58,4 @@ const LoginForm = ({ setErrorMessage }) => {
   );
 };
 
-LoginForm.propTypes = {
-  setUser: PropTypes.func.isRequired,
-  setErrorMessage: PropTypes.func.isRequired,
-};
-
 export default LoginForm;

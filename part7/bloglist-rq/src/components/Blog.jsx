@@ -1,15 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { likeBlog, removeBlog } from '../services/blogs';
 
-import PropTypes from 'prop-types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import PropTypes from 'prop-types';
 import { useNotificationDispatch } from '../helpers/NotificationContext';
 import getError from '../helpers/getError';
 
 const Blog = ({ blog, userId }) => {
   const [visible, setVisible] = useState(false);
-
   const showWhenVisible = { display: visible ? '' : 'none' };
+
 
   const toggleVisibility = () => {
     setVisible(!visible);
@@ -24,6 +24,7 @@ const Blog = ({ blog, userId }) => {
       queryClient.invalidateQueries({ queryKey: ['blogs'] });
     },
   });
+
   const removeBlogMutation = useMutation({
     mutationFn: removeBlog,
     onSuccess: () => {
@@ -55,6 +56,7 @@ const Blog = ({ blog, userId }) => {
     borderWidth: 1,
     marginBottom: 5,
   };
+
   return (
     <div className="blog" style={blogStyle}>
       <div id="title-author">
