@@ -12,6 +12,7 @@ const BlogView = () => {
   const onSubmit = (event) => {
     event.preventDefault();
     const body = event.target.body.value;
+    event.target.body.value = '';
     dispatch(addComment(id, body));
   };
 
