@@ -1,20 +1,25 @@
-import { useState, useEffect, useRef, useReducer, useContext } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useContext, useEffect, useRef, useState } from 'react';
 import Blog from './components/Blog';
-import LoginForm from './components/LoginForm';
 import BlogForm from './components/BlogForm';
+import LoginForm from './components/LoginForm';
 import Notification from './components/Notification';
 import Togglable from './components/Togglable';
-import blogService from './services/blogs';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { getAll, createBlog, likeBlog, removeBlog } from './services/blogs';
 import { useNotificationDispatch } from './helpers/NotificationContext';
 import getError from './helpers/getError';
+import blogService, {
+  createBlog,
+  getAll,
+  likeBlog,
+  removeBlog,
+} from './services/blogs';
+import UserContext from './helpers/UserContext';
 
 const App = () => {
   const queryClient = useQueryClient();
   const setErrorMessage = useNotificationDispatch();
 
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useContext(UserContext);
 
   const newBlogMutation = useMutation({
     mutationFn: createBlog,
@@ -64,7 +69,7 @@ const App = () => {
 
   const handleLogout = () => {
     window.localStorage.removeItem('blogAppUser');
-    setUser(null);
+    setUser({ type: 'UNSET' });
   };
 
   const addBlog = async ({ title, author, url }) => {

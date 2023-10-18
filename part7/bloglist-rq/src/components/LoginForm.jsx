@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import loginService from '../services/login';
 import blogService from '../services/blogs';
 import PropTypes from 'prop-types';
+import { useUserDispatch } from '../helpers/UserContext';
 
-const LoginForm = ({ setUser, setErrorMessage }) => {
+const LoginForm = ({ setErrorMessage }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const setUser = useUserDispatch();
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -13,7 +15,7 @@ const LoginForm = ({ setUser, setErrorMessage }) => {
       const user = await loginService.login({ username, password });
       window.localStorage.setItem('blogAppUser', JSON.stringify(user));
       blogService.setToken(user.token);
-      setUser(user);
+      setUser({ type: 'SET', payload: user });
       setUsername('');
       setPassword('');
     } catch (error) {

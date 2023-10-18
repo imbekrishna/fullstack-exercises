@@ -1,14 +1,9 @@
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { NotificationContextProvider } from './helpers/NotificationContext';
-
-const queryClient = new QueryClient();
+import { AllProviders } from './helpers/AllProviders';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <QueryClientProvider client={queryClient}>
-    <NotificationContextProvider>
-      <App />
-    </NotificationContextProvider>
-  </QueryClientProvider>
+  <AllProviders>
+    <App />
+  </AllProviders>
 );
