@@ -1,18 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import Blog from './components/Blog';
 import BlogForm from './components/BlogForm';
 import LoginForm from './components/LoginForm';
 import Notification from './components/Notification';
-import Togglable from './components/Togglable';
 import { useNotificationDispatch } from './helpers/NotificationContext';
 import getError from './helpers/getError';
-import blogService, {
-  createBlog,
-  getAll,
-  likeBlog,
-  removeBlog,
-} from './services/blogs';
+import blogService, { getAll, likeBlog, removeBlog } from './services/blogs';
 import UserContext from './helpers/UserContext';
 
 const App = () => {
@@ -21,19 +15,6 @@ const App = () => {
 
   const [user, setUser] = useContext(UserContext);
 
-  const newBlogMutation = useMutation({
-    mutationFn: createBlog,
-    onSuccess: (newBlog) => {
-      const blogs = queryClient.getQueryData(['blogs']);
-      queryClient.setQueryData(['blogs'], blogs.concat(newBlog));
-      const message = `a new blog ${newBlog.title} by ${newBlog.author} added`;
-      setErrorMessage({ message: message, isError: false });
-    },
-
-    onError: (error) => {
-      setErrorMessage({ message: getError(error), isError: true });
-    },
-  });
   const updateBlogMutation = useMutation({
     mutationFn: likeBlog,
     onSuccess: () => {
@@ -49,8 +30,6 @@ const App = () => {
       setErrorMessage({ message: getError(error), isError: false });
     },
   });
-
-  const blogFormRef = useRef();
 
   const result = useQuery({
     queryKey: ['blogs'],
@@ -70,11 +49,6 @@ const App = () => {
   const handleLogout = () => {
     window.localStorage.removeItem('blogAppUser');
     setUser({ type: 'UNSET' });
-  };
-
-  const addBlog = async ({ title, author, url }) => {
-    blogFormRef.current.toggleVisibility();
-    newBlogMutation.mutate({ title, author, url });
   };
 
   const deleteBlog = async (blog) => {
@@ -112,9 +86,7 @@ const App = () => {
             {user.name} logged in <button onClick={handleLogout}>logout</button>
           </p>
 
-          <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-            <BlogForm addBlog={addBlog} />
-          </Togglable>
+          <BlogForm />
           {blogs
             .sort((a, b) => b.likes - a.likes)
             .map((blog) => (

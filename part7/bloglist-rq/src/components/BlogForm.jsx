@@ -1,10 +1,37 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createBlog } from '../services/blogs';
+import { useNotificationDispatch } from '../helpers/NotificationContext';
+import getError from '../helpers/getError';
+import Togglable from './Togglable';
 
-const BlogForm = ({ addBlog }) => {
+const BlogForm = () => {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
+  const setErrorMessage = useNotificationDispatch();
+  const blogFormRef = useRef();
+  const queryClient = useQueryClient();
+
+  const newBlogMutation = useMutation({
+    mutationFn: createBlog,
+    onSuccess: (newBlog) => {
+      const blogs = queryClient.getQueryData(['blogs']);
+      queryClient.setQueryData(['blogs'], blogs.concat(newBlog));
+      const message = `a new blog ${newBlog.title} by ${newBlog.author} added`;
+      setErrorMessage({ message: message, isError: false });
+    },
+
+    onError: (error) => {
+      setErrorMessage({ message: getError(error), isError: true });
+    },
+  });
+
+  const addBlog = async ({ title, author, url }) => {
+    blogFormRef.current.toggleVisibility();
+    newBlogMutation.mutate({ title, author, url });
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -16,7 +43,11 @@ const BlogForm = ({ addBlog }) => {
   };
 
   return (
-    <div className="formDiv">
+    <Togglable
+      buttonLabel="create new blog"
+      className="formDiv"
+      ref={blogFormRef}
+    >
       <h2>Create new</h2>
       <form onSubmit={handleSubmit}>
         <div>
@@ -52,9 +83,11 @@ const BlogForm = ({ addBlog }) => {
             onChange={({ target }) => setUrl(target.value)}
           />
         </div>
-        <button id='createBlog' type="submit">Create</button>
+        <button id="createBlog" type="submit">
+          Create
+        </button>
       </form>
-    </div>
+    </Togglable>
   );
 };
 
