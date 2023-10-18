@@ -51,7 +51,9 @@ const NavbarCrumb = () => {
             {user ? (
               <span>
                 <em style={padding}>{user.name} logged in</em>{' '}
-                <Button size='sm'>logout</Button>
+                <Button size="sm" onClick={handleLogout}>
+                  logout
+                </Button>
               </span>
             ) : (
               <Link style={padding} to="/login">

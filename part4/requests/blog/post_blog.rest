@@ -83,8 +83,8 @@ POST http://localhost:3001/api/blogs/like/6528f0c42979ed4a94ecdaf4 HTTP/1.1
 # post with invalid bearer token
 POST http://localhost:3001/api/blogs/6528f0c42979ed4a94ecdaf4/comments HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY1Mjg1NTZhYzNmZTI3YzlkZGEwYTdjZCIsImlhdCI6MTY5NzYxMDIwMCwiZXhwIjoxNjk3NjEzODAwfQ.NQ9SDBDs27wDmTpD97lVf1YxzYD25YZx6bOfM1zowgM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY1Mjg1NTZhYzNmZTI3YzlkZGEwYTdjZCIsImlhdCI6MTY5NzY1NDIxNywiZXhwIjoxNjk3NjU3ODE3fQ.s73RaCl0qTYw4SMiazu8RFCNv7XFsamd5_2R9QfGmb4
 
 {
-    "body": "this was awesome"
+    "body": "third comment"
 }

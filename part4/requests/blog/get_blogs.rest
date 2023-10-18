@@ -1,2 +1,5 @@
 # get all the blogs
 GET http://localhost:3001/api/blogs HTTP/1.1
+
+###
+GET http://localhost:3001/api/blogs/6528556ac3fe27c9dda0a7cd HTTP/1.1

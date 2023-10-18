@@ -31,4 +31,15 @@ export const likeBlog = (id) => {
   return axios.post(`${baseUrl}/like/${id}`).then((res) => res.data);
 };
 
+export const getOne = async (id) =>
+  axios.get(`${baseUrl}/${id}`).then((res) => res.data);
+
+export const comment = ({ id, newComment }) => {
+  console.log(comment);
+  const config = { headers: { Authorization: `Bearer ${bearerToken}` } };
+  return axios
+    .post(`${baseUrl}/${id}/comments`, { body: newComment }, config)
+    .then((res) => res.data);
+};
+
 export default { setToken };
