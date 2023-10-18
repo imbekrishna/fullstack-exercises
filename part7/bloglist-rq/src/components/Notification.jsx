@@ -1,25 +1,28 @@
 import PropTypes from 'prop-types';
+import { useContext } from 'react';
+import NotificationContext from '../helpers/NotificationContext';
 
-const Notification = ({ message, isError }) => {
+const Notification = () => {
+  const [notification, dispatch] = useContext(NotificationContext);
   const alertStyle = {
-    color: isError ? 'red' : 'green',
+    color: notification.isError ? 'red' : 'green',
     fontSize: 24,
     backgroundColor: 'silver',
     padding: '5px 10px',
-    border: `3px solid ${isError ? 'red' : 'green'}`,
+    border: `3px solid ${notification.isError ? 'red' : 'green'}`,
     borderRadius: 5,
     margin: 5,
   };
+
+  if (!notification.message) {
+    return;
+  }
+
   return (
     <div className="notification" style={alertStyle}>
-      {message}
+      {notification.message}
     </div>
   );
-};
-
-Notification.propTypes = {
-  message: PropTypes.string.isRequired,
-  isError: PropTypes.bool.isRequired,
 };
 
 export default Notification;
