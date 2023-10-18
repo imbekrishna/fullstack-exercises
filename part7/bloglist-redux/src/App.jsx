@@ -12,6 +12,7 @@ import { Routes, Route, Link } from 'react-router-dom';
 import { getUser } from './app/accountSlice';
 import { useEffect } from 'react';
 import { initalizeBlog } from './app/blogSlice';
+import { Container } from 'react-bootstrap';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -30,7 +31,7 @@ const App = () => {
   }
 
   return (
-    <div>
+    <Container className='my-3'>
       <div>
         <Link style={padding} to="/">
           blogs
@@ -42,14 +43,13 @@ const App = () => {
       </div>
       <h2>Blogs</h2>
       <Notification />
-      <LoggedInUser />
       <Routes>
         <Route path="/blogs/:id" element={<BlogView />} />
         <Route path="/users" element={<Users />} />
         <Route path="/users/:id" element={<User />} />
         <Route path="/" element={<Home />} />
       </Routes>
-    </div>
+    </Container>
   );
 };
 
@@ -58,10 +58,8 @@ export default App;
 const Home = () => {
   return (
     <>
-      <div>
-        <BlogForm />
-        <BlogList />
-      </div>
+      <BlogForm />
+      <BlogList />
     </>
   );
 };

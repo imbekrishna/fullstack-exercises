@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteBlog, likeBlog } from '../app/blogSlice';
 import { Link } from 'react-router-dom';
+import { Table } from 'react-bootstrap';
 
 const Blog = ({ blog }) => {
   const dispatch = useDispatch();
@@ -28,38 +29,13 @@ const Blog = ({ blog }) => {
     }
   };
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
-  };
   return (
-    <div className="blog" style={blogStyle}>
-      <div id="title-author">
-        <Link to={`/blogs/${blog.id}`}>
-          {blog.title} {blog.author}
-        </Link>
-        <div style={showWhenVisible} id="detail-div">
-          <a id="blog-url" href={blog.url}>
-            {blog.url}
-          </a>
-          <div>
-            likes {blog.likes}{' '}
-            <button id="likeButton" onClick={() => dispatch(likeBlog(blog.id))}>
-              like
-            </button>
-          </div>
-          <div>{blog.user.name}</div>
-          {blog.user.id === user.user_id ? (
-            <button onClick={() => removeBlog(blog)}>remove</button>
-          ) : (
-            ''
-          )}
-        </div>
-      </div>
-    </div>
+    <tr>
+      <td>
+        <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+      </td>
+      <td>{blog.author}</td>
+    </tr>
   );
 };
 

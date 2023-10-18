@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser, removeUser } from '../app/accountSlice';
 import { useEffect } from 'react';
+import { Button } from 'react-bootstrap';
 
 const LoggedInUser = () => {
   const dispatch = useDispatch();
@@ -13,7 +14,13 @@ const LoggedInUser = () => {
   return (
     <span>
       {user.name} logged in{' '}
-      <button onClick={() => dispatch(removeUser())}>logout</button>
+      <Button
+        size="sm"
+        variant="outline-danger"
+        onClick={() => dispatch(removeUser())}
+      >
+        logout
+      </Button>
     </span>
   );
 };

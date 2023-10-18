@@ -3,11 +3,12 @@ import Togglable from './Togglable';
 import { useDispatch } from 'react-redux';
 import { setMessage } from '../app/notificationSlice';
 import { createBlog } from '../app/blogSlice';
+import { Button, Container, Form } from 'react-bootstrap';
 
 const BlogForm = () => {
-  const [title, setTitle] = useState('Default title');
-  const [author, setAuthor] = useState('Default Author');
-  const [url, setUrl] = useState('http://localhost');
+  const [title, setTitle] = useState('');
+  const [author, setAuthor] = useState('');
+  const [url, setUrl] = useState('');
 
   const dispatch = useDispatch();
 
@@ -39,12 +40,12 @@ const BlogForm = () => {
 
   return (
     <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-      <div className="formDiv">
-        <h2>Create new</h2>
-        <form onSubmit={handleSubmit}>
-          <div>
-            title:
-            <input
+      <Container className="formDiv">
+        <h3>Create new</h3>
+        <Form onSubmit={handleSubmit}>
+          <Form.Group>
+            <Form.Label>Title:</Form.Label>
+            <Form.Control
               id="blogTitle"
               type="text"
               value={title}
@@ -52,10 +53,10 @@ const BlogForm = () => {
               placeholder="Blog title"
               onChange={({ target }) => setTitle(target.value)}
             />
-          </div>
-          <div>
-            author:
-            <input
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Author:</Form.Label>
+            <Form.Control
               id="blogAuthor"
               type="text"
               value={author}
@@ -63,10 +64,10 @@ const BlogForm = () => {
               placeholder="Blog author"
               onChange={({ target }) => setAuthor(target.value)}
             />
-          </div>
-          <div>
-            url:
-            <input
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Url:</Form.Label>
+            <Form.Control
               id="blogUrl"
               type="url"
               value={url}
@@ -74,12 +75,25 @@ const BlogForm = () => {
               placeholder="Blog url"
               onChange={({ target }) => setUrl(target.value)}
             />
-          </div>
-          <button id="createBlog" type="submit">
+          </Form.Group>
+          <Button
+            variant="outline-primary"
+            size="sm"
+            id="createBlog"
+            type="submit"
+          >
             Create
-          </button>
-        </form>
-      </div>
+          </Button>
+          <Button
+            className="ms-3"
+            size="sm"
+            variant="outline-secondary"
+            onClick={() => blogFormRef.current.toggleVisibility()}
+          >
+            cancel
+          </Button>
+        </Form>
+      </Container>
     </Togglable>
   );
 };
