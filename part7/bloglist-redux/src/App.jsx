@@ -7,7 +7,7 @@ import LoggedInUser from './components/LoggedInUser';
 import User from './components/User';
 import Users from './components/Users';
 import { useDispatch, useSelector } from 'react-redux';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, Navigate } from 'react-router-dom';
 
 import { getUser } from './app/accountSlice';
 import { useEffect } from 'react';
@@ -26,12 +26,9 @@ const App = () => {
     padding: 5,
   };
 
-  if (!user) {
-    return <LoginForm />;
-  }
-
   return (
-    <Container className='my-3'>
+    <Container className="my-3">
+      <h2>Blogs</h2>
       <div>
         <Link style={padding} to="/">
           blogs
@@ -39,14 +36,24 @@ const App = () => {
         <Link style={padding} to="/users">
           users
         </Link>
-        {user && <LoggedInUser />}
+        {user ? (
+          <LoggedInUser />
+        ) : (
+          <Link style={padding} to="/login">
+            login
+          </Link>
+        )}
       </div>
       <h2>Blogs</h2>
       <Notification />
       <Routes>
         <Route path="/blogs/:id" element={<BlogView />} />
-        <Route path="/users" element={<Users />} />
+        <Route
+          path="/users"
+          element={user ? <Users /> : <Navigate replace to="/login" />}
+        />
         <Route path="/users/:id" element={<User />} />
+        <Route path="/login" element={<LoginForm />} />
         <Route path="/" element={<Home />} />
       </Routes>
     </Container>

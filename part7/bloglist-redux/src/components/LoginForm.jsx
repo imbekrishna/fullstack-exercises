@@ -2,11 +2,14 @@ import { useState } from 'react';
 import { setMessage } from '../app/notificationSlice';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../app/accountSlice';
+import { Button, Container, Form } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -15,7 +18,6 @@ const LoginForm = () => {
       setUsername('');
       setPassword('');
     } catch (error) {
-      console.log(error);
       dispatch(
         setMessage({ message: 'wrong username or password', isError: true })
       );
@@ -24,36 +26,38 @@ const LoginForm = () => {
     setTimeout(() => {
       dispatch(setMessage({ message: null }));
     }, 5000);
+
+    navigate('/');
   };
 
   return (
-    <>
-      <form onSubmit={handleLogin}>
-        <div>
-          username
-          <input
+    <Container>
+      <Form onSubmit={handleLogin}>
+        <Form.Group>
+          <Form.Label>Username</Form.Label>
+          <Form.Control
             id="username"
             type="text"
             value={username}
             name="Username"
             onChange={({ target }) => setUsername(target.value)}
           />
-        </div>
-        <div>
+        </Form.Group>
+        <Form.Group>
           password
-          <input
+          <Form.Control
             id="password"
             type="password"
             value={password}
             name="Password"
             onChange={({ target }) => setPassword(target.value)}
           />
-        </div>
-        <button id="login-button" type="submit">
+        </Form.Group>
+        <Button className="mt-3" id="login-button" type="submit">
           login
-        </button>
-      </form>
-    </>
+        </Button>
+      </Form>
+    </Container>
   );
 };
 
